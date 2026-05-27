@@ -1,10 +1,5 @@
 package brotli
 
-import (
-	"math"
-	"math/bits"
-)
-
 /* Copyright 2013 Google Inc. All Rights Reserved.
 
    Distributed under MIT license.
@@ -13,14 +8,15 @@ import (
 
 /* Utilities for fast computation of logarithms. */
 
-func log2FloorNonZero(n uint) uint32 {
-	return uint32(bits.Len(n)) - 1
-}
+func log2FloorNonZero(n uint) uint32 { _ = "STUB: not implemented"; return 0 }
 
-/* A lookup table for small values of log2(int) to be used in entropy
-   computation.
+/*
+A lookup table for small values of log2(int) to be used in entropy
 
-   ", ".join(["%.16ff" % x for x in [0.0]+[log2(x) for x in range(1, 256)]]) */
+	computation.
+
+	", ".join(["%.16ff" % x for x in [0.0]+[log2(x) for x in range(1, 256)]])
+*/
 var kLog2Table = []float32{
 	0.0000000000000000,
 	0.0000000000000000,
@@ -281,10 +277,4 @@ var kLog2Table = []float32{
 }
 
 /* Faster logarithm for small integers, with the property of log2(0) == 0. */
-func fastLog2(v uint) float64 {
-	if v < uint(len(kLog2Table)) {
-		return float64(kLog2Table[v])
-	}
-
-	return math.Log2(float64(v))
-}
+func fastLog2(v uint) float64 { _ = "STUB: not implemented"; return 0 }

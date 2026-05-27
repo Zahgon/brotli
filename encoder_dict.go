@@ -10,13 +10,4 @@ type encoderDictionary struct {
 	dict_words            []dictWord
 }
 
-func initEncoderDictionary(dict *encoderDictionary) {
-	dict.words = getDictionary()
-
-	dict.hash_table = kStaticDictionaryHash[:]
-	dict.buckets = kStaticDictionaryBuckets[:]
-	dict.dict_words = kStaticDictionaryWords[:]
-
-	dict.cutoffTransformsCount = kCutoffTransformsCount
-	dict.cutoffTransforms = kCutoffTransforms
-}
+func initEncoderDictionary(dict *encoderDictionary) { _ = "STUB: not implemented"; return }

@@ -2167,10 +2167,6 @@ var kContextLookup = [2048]byte{
 
 type contextLUT []byte
 
-func getContextLUT(mode int) contextLUT {
-	return kContextLookup[mode<<9:]
-}
+func getContextLUT(mode int) contextLUT { _ = "STUB: not implemented"; return *new(contextLUT) }
 
-func getContext(p1 byte, p2 byte, lut contextLUT) byte {
-	return lut[p1] | lut[256+int(p2)]
-}
+func getContext(p1 byte, p2 byte, lut contextLUT) byte { _ = "STUB: not implemented"; return 0 }

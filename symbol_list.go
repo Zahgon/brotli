@@ -13,10 +13,6 @@ type symbolList struct {
 	offset  int
 }
 
-func symbolListGet(sl symbolList, i int) uint16 {
-	return sl.storage[i+sl.offset]
-}
+func symbolListGet(sl symbolList, i int) uint16 { _ = "STUB: not implemented"; return 0 }
 
-func symbolListPut(sl symbolList, i int, val uint16) {
-	sl.storage[i+sl.offset] = val
-}
+func symbolListPut(sl symbolList, i int, val uint16) { _ = "STUB: not implemented"; return }

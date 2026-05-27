@@ -16,15 +16,9 @@ type histogramPair struct {
 }
 
 func histogramPairIsLess(p1 *histogramPair, p2 *histogramPair) bool {
-	if p1.cost_diff != p2.cost_diff {
-		return p1.cost_diff > p2.cost_diff
-	}
-
-	return (p1.idx2 - p1.idx1) > (p2.idx2 - p2.idx1)
+	_ = "STUB: not implemented"
+	return false
 }
 
 /* Returns entropy reduction of the context map when we combine two clusters. */
-func clusterCostDiff(size_a uint, size_b uint) float64 {
-	var size_c uint = size_a + size_b
-	return float64(size_a)*fastLog2(size_a) + float64(size_b)*fastLog2(size_b) - float64(size_c)*fastLog2(size_c)
-}
+func clusterCostDiff(size_a uint, size_b uint) float64 { _ = "STUB: not implemented"; return 0 }

@@ -24,11 +24,4 @@ type matchEmitter struct {
 	NextEmit int
 }
 
-func (e *matchEmitter) emit(m absoluteMatch) {
-	e.Dst = append(e.Dst, Match{
-		Unmatched: m.Start - e.NextEmit,
-		Length:    m.End - m.Start,
-		Distance:  m.Start - m.Match,
-	})
-	e.NextEmit = m.End
-}
+func (e *matchEmitter) emit(m absoluteMatch) { _ = "STUB: not implemented"; return }

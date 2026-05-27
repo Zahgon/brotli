@@ -1,29 +1,14 @@
 package matchfinder
 
-import "fmt"
-
 // A TextEncoder is an Encoder that produces a human-readable representation of
 // the LZ77 compression. Matches are replaced with <Length,Distance> symbols.
 type TextEncoder struct{}
 
-func (t TextEncoder) Reset() {}
+func (t TextEncoder) Reset() { _ = "STUB: not implemented"; return }
 
 func (t TextEncoder) Encode(dst []byte, src []byte, matches []Match, lastBlock bool) []byte {
-	pos := 0
-	for _, m := range matches {
-		if m.Unmatched > 0 {
-			dst = append(dst, src[pos:pos+m.Unmatched]...)
-			pos += m.Unmatched
-		}
-		if m.Length > 0 {
-			dst = append(dst, []byte(fmt.Sprintf("<%d,%d>", m.Length, m.Distance))...)
-			pos += m.Length
-		}
-	}
-	if pos < len(src) {
-		dst = append(dst, src[pos:]...)
-	}
-	return dst
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // A NoMatchFinder implements MatchFinder, but doesn't find any matches.
@@ -31,12 +16,11 @@ func (t TextEncoder) Encode(dst []byte, src []byte, matches []Match, lastBlock b
 // HuffmanOnly setting.
 type NoMatchFinder struct{}
 
-func (n NoMatchFinder) Reset() {}
+func (n NoMatchFinder) Reset() { _ = "STUB: not implemented"; return }
 
 func (n NoMatchFinder) FindMatches(dst []Match, src []byte) []Match {
-	return append(dst, Match{
-		Unmatched: len(src),
-	})
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // AutoReset wraps a MatchFinder that can return references to data in previous
@@ -48,6 +32,6 @@ type AutoReset struct {
 }
 
 func (a AutoReset) FindMatches(dst []Match, src []byte) []Match {
-	a.Reset()
-	return a.MatchFinder.FindMatches(dst, src)
+	_ = "STUB: not implemented"
+	return nil
 }

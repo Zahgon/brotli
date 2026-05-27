@@ -122885,6 +122885,4 @@ var kBrotliDictionary = dictionary{
 	kBrotliDictionaryData,
 }
 
-func getDictionary() *dictionary {
-	return &kBrotliDictionary
-}
+func getDictionary() *dictionary { _ = "STUB: not implemented"; return nil }

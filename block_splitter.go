@@ -34,111 +34,47 @@ const (
 )
 
 func countLiterals(cmds []command) uint {
-	var total_length uint = 0
+	_ = "STUB: not implemented"
+	return
+
 	/* Count how many we have. */
-
-	for i := range cmds {
-		total_length += uint(cmds[i].insert_len_)
-	}
-
-	return total_length
+	0
 }
 
 func copyLiteralsToByteArray(cmds []command, data []byte, offset uint, mask uint, literals []byte) {
-	var pos uint = 0
-	var from_pos uint = offset & mask
-	for i := range cmds {
-		var insert_len uint = uint(cmds[i].insert_len_)
-		if from_pos+insert_len > mask {
-			var head_size uint = mask + 1 - from_pos
-			copy(literals[pos:], data[from_pos:][:head_size])
-			from_pos = 0
-			pos += head_size
-			insert_len -= head_size
-		}
-
-		if insert_len > 0 {
-			copy(literals[pos:], data[from_pos:][:insert_len])
-			pos += insert_len
-		}
-
-		from_pos = uint((uint32(from_pos+insert_len) + commandCopyLen(&cmds[i])) & uint32(mask))
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func myRand(seed *uint32) uint32 {
-	/* Initial seed should be 7. In this case, loop length is (1 << 29). */
-	*seed *= 16807
-
-	return *seed
+	_ = "STUB: not implemented"
+	/* Initial seed should be 7. In this case, loop length is (1 << 29). */ return 0
 }
 
-func bitCost(count uint) float64 {
-	if count == 0 {
-		return -2.0
-	} else {
-		return fastLog2(count)
-	}
-}
+func bitCost(count uint) float64 { _ = "STUB: not implemented"; return 0 }
 
 const histogramsPerBatch = 64
 
 const clustersPerBatch = 16
 
-func initBlockSplit(self *blockSplit) {
-	self.num_types = 0
-	self.num_blocks = 0
-	self.types = self.types[:0]
-	self.lengths = self.lengths[:0]
-	self.types_alloc_size = 0
-	self.lengths_alloc_size = 0
-}
+func initBlockSplit(self *blockSplit) { _ = "STUB: not implemented"; return }
 
 func splitBlock(cmds []command, data []byte, pos uint, mask uint, params *encoderParams, literal_split *blockSplit, insert_and_copy_split *blockSplit, dist_split *blockSplit) {
-	{
-		var literals_count uint = countLiterals(cmds)
-		var literals []byte = make([]byte, literals_count)
-
-		/* Create a continuous array of literals. */
-		copyLiteralsToByteArray(cmds, data, pos, mask, literals)
-
-		/* Create the block split on the array of literals.
-		   Literal histograms have alphabet size 256. */
-		splitByteVectorLiteral(literals, literals_count, kSymbolsPerLiteralHistogram, kMaxLiteralHistograms, kLiteralStrideLength, kLiteralBlockSwitchCost, params, literal_split)
-
-		literals = nil
-	}
-	{
-		var insert_and_copy_codes []uint16 = make([]uint16, len(cmds))
-		/* Compute prefix codes for commands. */
-
-		for i := range cmds {
-			insert_and_copy_codes[i] = cmds[i].cmd_prefix_
-		}
-
-		/* Create the block split on the array of command prefixes. */
-		splitByteVectorCommand(insert_and_copy_codes, kSymbolsPerCommandHistogram, kMaxCommandHistograms, kCommandStrideLength, kCommandBlockSwitchCost, params, insert_and_copy_split)
-
-		/* TODO: reuse for distances? */
-
-		insert_and_copy_codes = nil
-	}
-	{
-		var distance_prefixes []uint16 = make([]uint16, len(cmds))
-		var j uint = 0
-		/* Create a continuous array of distance prefixes. */
-
-		for i := range cmds {
-			var cmd *command = &cmds[i]
-			if commandCopyLen(cmd) != 0 && cmd.cmd_prefix_ >= 128 {
-				distance_prefixes[j] = cmd.dist_prefix_ & 0x3FF
-				j++
-			}
-		}
-
-		/* Create the block split on the array of distance prefixes. */
-		splitByteVectorDistance(distance_prefixes, j, kSymbolsPerDistanceHistogram, kMaxCommandHistograms, kCommandStrideLength, kDistanceBlockSwitchCost, params, dist_split)
-
-		distance_prefixes = nil
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+/* Create a continuous array of literals. */
+
+/* Create the block split on the array of literals.
+   Literal histograms have alphabet size 256. */
+
+/* Compute prefix codes for commands. */
+
+/* Create the block split on the array of command prefixes. */
+
+/* TODO: reuse for distances? */
+
+/* Create a continuous array of distance prefixes. */
+
+/* Create the block split on the array of distance prefixes. */

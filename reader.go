@@ -7,9 +7,7 @@ import (
 
 type decodeError int
 
-func (err decodeError) Error() string {
-	return "brotli: " + string(decoderErrorString(int(err)))
-}
+func (err decodeError) Error() string { _ = "STUB: not implemented"; return "" }
 
 var errExcessiveInput = errors.New("brotli: excessive input")
 var errInvalidState = errors.New("brotli: invalid state")
@@ -20,107 +18,23 @@ var errInvalidState = errors.New("brotli: invalid state")
 const readBufSize = 32 * 1024
 
 // NewReader creates a new Reader reading the given reader.
-func NewReader(src io.Reader) *Reader {
-	r := new(Reader)
-	r.Reset(src)
-	return r
-}
+func NewReader(src io.Reader) *Reader { _ = "STUB: not implemented"; return nil }
 
 // Reset discards the Reader's state and makes it equivalent to the result of
 // its original state from NewReader, but reading from src instead.
 // This permits reusing a Reader rather than allocating a new one.
 // Error is always nil
-func (r *Reader) Reset(src io.Reader) error {
-	if r.error_code < 0 {
-		// There was an unrecoverable error, leaving the Reader's state
-		// undefined. Clear out everything but the buffers.
-		*r = Reader{
-			buf:              r.buf,
-			block_type_trees: r.block_type_trees,
-			literal_hgroup: huffmanTreeGroup{
-				htrees: r.literal_hgroup.htrees,
-				codes:  r.literal_hgroup.codes,
-			},
-			distance_hgroup: huffmanTreeGroup{
-				htrees: r.distance_hgroup.htrees,
-				codes:  r.distance_hgroup.codes,
-			},
-			insert_copy_hgroup: huffmanTreeGroup{
-				htrees: r.insert_copy_hgroup.htrees,
-				codes:  r.insert_copy_hgroup.codes,
-			},
-		}
-	}
+func (r *Reader) Reset(src io.Reader) error { _ = "STUB: not implemented"; return nil }
 
-	decoderStateInit(r)
-	r.src = src
-	if r.buf == nil {
-		r.buf = make([]byte, readBufSize)
-	}
-	return nil
-}
+// There was an unrecoverable error, leaving the Reader's state
+// undefined. Clear out everything but the buffers.
 
-func (r *Reader) Read(p []byte) (n int, err error) {
-	if !decoderHasMoreOutput(r) && len(r.in) == 0 {
-		m, readErr := r.src.Read(r.buf)
-		if m == 0 {
-			if readErr == io.EOF && r.state != stateDone {
-				readErr = io.ErrUnexpectedEOF
-			}
-			// If readErr is `nil`, we just proxy underlying stream behavior.
-			return 0, readErr
-		}
-		r.in = r.buf[:m]
-	}
+func (r *Reader) Read(p []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
-	if len(p) == 0 {
-		return 0, nil
-	}
+// If readErr is `nil`, we just proxy underlying stream behavior.
 
-	for {
-		var written uint
-		in_len := uint(len(r.in))
-		out_len := uint(len(p))
-		in_remaining := in_len
-		out_remaining := out_len
-		result := decoderDecompressStream(r, &in_remaining, &r.in, &out_remaining, &p)
-		written = out_len - out_remaining
-		n = int(written)
+// Calling r.src.Read may block. Don't block if we have data to return.
 
-		switch result {
-		case decoderResultSuccess:
-			if len(r.in) > 0 {
-				return n, errExcessiveInput
-			}
-			return n, nil
-		case decoderResultError:
-			return n, decodeError(decoderGetErrorCode(r))
-		case decoderResultNeedsMoreOutput:
-			if n == 0 {
-				return 0, io.ErrShortBuffer
-			}
-			return n, nil
-		case decoderNeedsMoreInput:
-		}
+// Top off the buffer.
 
-		if len(r.in) != 0 {
-			return 0, errInvalidState
-		}
-
-		// Calling r.src.Read may block. Don't block if we have data to return.
-		if n > 0 {
-			return n, nil
-		}
-
-		// Top off the buffer.
-		encN, err := r.src.Read(r.buf)
-		if encN == 0 {
-			// Not enough data to complete decoding.
-			if err == io.EOF {
-				return 0, io.ErrUnexpectedEOF
-			}
-			return 0, err
-		}
-		r.in = r.buf[:encN]
-	}
-}
+// Not enough data to complete decoding.

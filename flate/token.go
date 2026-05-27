@@ -4,8 +4,6 @@
 
 package flate
 
-import "log"
-
 // The length code for length X (MIN_MATCH_LENGTH <= X <= MAX_MATCH_LENGTH)
 // is lengthCodes[length - MIN_MATCH_LENGTH]
 var lengthCodes = [...]uint32{
@@ -56,25 +54,7 @@ var offsetCodes = [...]uint32{
 	15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
 }
 
-func lengthCode(len int) uint32 {
-	if len > 258 {
-		panic("match too long")
-	}
-	return lengthCodes[len-baseMatchLength]
-}
+func lengthCode(len int) uint32 { _ = "STUB: not implemented"; return 0 }
 
 // Returns the offset code corresponding to a specific offset
-func offsetCode(off int) uint32 {
-	if off > 32768 {
-		log.Println(off)
-		panic("match distance too high")
-	}
-	off -= baseMatchOffset
-	if off < len(offsetCodes) {
-		return offsetCodes[off]
-	}
-	if off>>7 < len(offsetCodes) {
-		return offsetCodes[off>>7] + 14
-	}
-	return offsetCodes[off>>14] + 28
-}
+func offsetCode(off int) uint32 { _ = "STUB: not implemented"; return 0 }

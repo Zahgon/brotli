@@ -1,7 +1,3 @@
 package brotli
 
-func assert(cond bool) {
-	if !cond {
-		panic("assertion failure")
-	}
-}
+func assert(cond bool) { _ = "STUB: not implemented"; return }

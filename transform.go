@@ -39,25 +39,15 @@ type transforms struct {
 	cutOffTransforms   [transformsMaxCutOff + 1]int16
 }
 
-func transformPrefixId(t *transforms, I int) byte {
-	return t.transforms[(I*3)+0]
-}
+func transformPrefixId(t *transforms, I int) byte { _ = "STUB: not implemented"; return 0 }
 
-func transformType(t *transforms, I int) byte {
-	return t.transforms[(I*3)+1]
-}
+func transformType(t *transforms, I int) byte { _ = "STUB: not implemented"; return 0 }
 
-func transformSuffixId(t *transforms, I int) byte {
-	return t.transforms[(I*3)+2]
-}
+func transformSuffixId(t *transforms, I int) byte { _ = "STUB: not implemented"; return 0 }
 
-func transformPrefix(t *transforms, I int) []byte {
-	return t.prefix_suffix[t.prefix_suffix_map[transformPrefixId(t, I)]:]
-}
+func transformPrefix(t *transforms, I int) []byte { _ = "STUB: not implemented"; return nil }
 
-func transformSuffix(t *transforms, I int) []byte {
-	return t.prefix_suffix[t.prefix_suffix_map[transformSuffixId(t, I)]:]
-}
+func transformSuffix(t *transforms, I int) []byte { _ = "STUB: not implemented"; return nil }
 
 /* RFC 7932 transforms string data */
 const kPrefixSuffix string = "\001 \002, \010 of the \004 of \002s \001.\005 and \004 " + "in \001\"\004 to \002\">\001\n\002. \001]\005 for \003 a \006 " + "that \001'\006 with \006 from \004 by \001(\006. T" + "he \004 on \004 as \004 is \004ing \002\n\t\001:\003ed " + "\002=\"\004 at \003ly \001,\002='\005.com/\007. This \005" + " not \003er \003al \004ful \004ive \005less \004es" + "t \004ize \002\xc2\xa0\004ous \005 the \002e \000"
@@ -492,150 +482,30 @@ var kBrotliTransforms = transforms{
 	[transformsMaxCutOff + 1]int16{0, 12, 27, 23, 42, 63, 56, 48, 59, 64},
 }
 
-func getTransforms() *transforms {
-	return &kBrotliTransforms
-}
+func getTransforms() *transforms { _ = "STUB: not implemented"; return nil }
 
-func toUpperCase(p []byte) int {
-	if p[0] < 0xC0 {
-		if p[0] >= 'a' && p[0] <= 'z' {
-			p[0] ^= 32
-		}
+func toUpperCase(p []byte) int { _ = "STUB: not implemented"; return 0 }
 
-		return 1
-	}
+/* An overly simplified uppercasing model for UTF-8. */
 
-	/* An overly simplified uppercasing model for UTF-8. */
-	if p[0] < 0xE0 {
-		p[1] ^= 32
-		return 2
-	}
-
-	/* An arbitrary transform for three byte characters. */
-	p[2] ^= 5
-
-	return 3
-}
+/* An arbitrary transform for three byte characters. */
 
 func shiftTransform(word []byte, word_len int, parameter uint16) int {
-	/* Limited sign extension: scalar < (1 << 24). */
-	var scalar uint32 = (uint32(parameter) & 0x7FFF) + (0x1000000 - (uint32(parameter) & 0x8000))
-	if word[0] < 0x80 {
-		/* 1-byte rune / 0sssssss / 7 bit scalar (ASCII). */
-		scalar += uint32(word[0])
-
-		word[0] = byte(scalar & 0x7F)
-		return 1
-	} else if word[0] < 0xC0 {
-		/* Continuation / 10AAAAAA. */
-		return 1
-	} else if word[0] < 0xE0 {
-		/* 2-byte rune / 110sssss AAssssss / 11 bit scalar. */
-		if word_len < 2 {
-			return 1
-		}
-		scalar += uint32(word[1]&0x3F | (word[0]&0x1F)<<6)
-		word[0] = byte(0xC0 | (scalar>>6)&0x1F)
-		word[1] = byte(uint32(word[1]&0xC0) | scalar&0x3F)
-		return 2
-	} else if word[0] < 0xF0 {
-		/* 3-byte rune / 1110ssss AAssssss BBssssss / 16 bit scalar. */
-		if word_len < 3 {
-			return word_len
-		}
-		scalar += uint32(word[2])&0x3F | uint32(word[1]&0x3F)<<6 | uint32(word[0]&0x0F)<<12
-		word[0] = byte(0xE0 | (scalar>>12)&0x0F)
-		word[1] = byte(uint32(word[1]&0xC0) | (scalar>>6)&0x3F)
-		word[2] = byte(uint32(word[2]&0xC0) | scalar&0x3F)
-		return 3
-	} else if word[0] < 0xF8 {
-		/* 4-byte rune / 11110sss AAssssss BBssssss CCssssss / 21 bit scalar. */
-		if word_len < 4 {
-			return word_len
-		}
-		scalar += uint32(word[3])&0x3F | uint32(word[2]&0x3F)<<6 | uint32(word[1]&0x3F)<<12 | uint32(word[0]&0x07)<<18
-		word[0] = byte(0xF0 | (scalar>>18)&0x07)
-		word[1] = byte(uint32(word[1]&0xC0) | (scalar>>12)&0x3F)
-		word[2] = byte(uint32(word[2]&0xC0) | (scalar>>6)&0x3F)
-		word[3] = byte(uint32(word[3]&0xC0) | scalar&0x3F)
-		return 4
-	}
-
-	return 1
+	_ = "STUB: not implemented"
+	/* Limited sign extension: scalar < (1 << 24). */ return 0
 }
 
-func transformDictionaryWord(dst []byte, word []byte, len int, trans *transforms, transform_idx int) int {
-	var idx int = 0
-	var prefix []byte = transformPrefix(trans, transform_idx)
-	var type_ byte = transformType(trans, transform_idx)
-	var suffix []byte = transformSuffix(trans, transform_idx)
-	{
-		var prefix_len int = int(prefix[0])
-		prefix = prefix[1:]
-		for {
-			tmp1 := prefix_len
-			prefix_len--
-			if tmp1 == 0 {
-				break
-			}
-			dst[idx] = prefix[0]
-			idx++
-			prefix = prefix[1:]
-		}
-	}
-	{
-		var t int = int(type_)
-		var i int = 0
-		if t <= transformOmitLast9 {
-			len -= t
-		} else if t >= transformOmitFirst1 && t <= transformOmitFirst9 {
-			var skip int = t - (transformOmitFirst1 - 1)
-			word = word[skip:]
-			len -= skip
-		}
+/* 1-byte rune / 0sssssss / 7 bit scalar (ASCII). */
 
-		for i < len {
-			dst[idx] = word[i]
-			idx++
-			i++
-		}
-		if t == transformUppercaseFirst {
-			toUpperCase(dst[idx-len:])
-		} else if t == transformUppercaseAll {
-			var uppercase []byte = dst
-			uppercase = uppercase[idx-len:]
-			for len > 0 {
-				var step int = toUpperCase(uppercase)
-				uppercase = uppercase[step:]
-				len -= step
-			}
-		} else if t == transformShiftFirst {
-			var param uint16 = uint16(trans.params[transform_idx*2]) + uint16(trans.params[transform_idx*2+1])<<8
-			shiftTransform(dst[idx-len:], int(len), param)
-		} else if t == transformShiftAll {
-			var param uint16 = uint16(trans.params[transform_idx*2]) + uint16(trans.params[transform_idx*2+1])<<8
-			var shift []byte = dst
-			shift = shift[idx-len:]
-			for len > 0 {
-				var step int = shiftTransform(shift, int(len), param)
-				shift = shift[step:]
-				len -= step
-			}
-		}
-	}
-	{
-		var suffix_len int = int(suffix[0])
-		suffix = suffix[1:]
-		for {
-			tmp2 := suffix_len
-			suffix_len--
-			if tmp2 == 0 {
-				break
-			}
-			dst[idx] = suffix[0]
-			idx++
-			suffix = suffix[1:]
-		}
-		return idx
-	}
+/* Continuation / 10AAAAAA. */
+
+/* 2-byte rune / 110sssss AAssssss / 11 bit scalar. */
+
+/* 3-byte rune / 1110ssss AAssssss BBssssss / 16 bit scalar. */
+
+/* 4-byte rune / 11110sss AAssssss BBssssss CCssssss / 21 bit scalar. */
+
+func transformDictionaryWord(dst []byte, word []byte, len int, trans *transforms, transform_idx int) int {
+	_ = "STUB: not implemented"
+	return 0
 }

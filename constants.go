@@ -50,7 +50,8 @@ const maxNdirect = 120
 const maxDistanceBits = 24
 
 func distanceAlphabetSize(NPOSTFIX uint, NDIRECT uint, MAXNBITS uint) uint {
-	return numDistanceShortCodes + NDIRECT + uint(MAXNBITS<<(NPOSTFIX+1))
+	_ = "STUB: not implemented"
+	return 0
 }
 
 /* numDistanceSymbols == 1128 */
@@ -72,6 +73,4 @@ const distanceContextBits = 2
    with BROTLI_NUM_DISTANCE_SHORT_CODES. */
 const windowGap = 16
 
-func maxBackwardLimit(W uint) uint {
-	return (uint(1) << W) - windowGap
-}
+func maxBackwardLimit(W uint) uint { _ = "STUB: not implemented"; return 0 }

@@ -16,41 +16,10 @@ type bitWriter struct {
 	nbits uint
 }
 
-func (w *bitWriter) writeBits(nb uint, b uint64) {
-	w.bits |= b << w.nbits
-	w.nbits += nb
-	if w.nbits >= 32 {
-		bits := w.bits
-		w.bits >>= 32
-		w.nbits -= 32
-		w.dst = append(w.dst,
-			byte(bits),
-			byte(bits>>8),
-			byte(bits>>16),
-			byte(bits>>24),
-		)
-	}
-}
+func (w *bitWriter) writeBits(nb uint, b uint64) { _ = "STUB: not implemented"; return }
 
-func (w *bitWriter) writeSingleBit(bit bool) {
-	if bit {
-		w.writeBits(1, 1)
-	} else {
-		w.writeBits(1, 0)
-	}
-}
+func (w *bitWriter) writeSingleBit(bit bool) { _ = "STUB: not implemented"; return }
 
-func (w *bitWriter) jumpToByteBoundary() {
-	dst := w.dst
-	for w.nbits != 0 {
-		dst = append(dst, byte(w.bits))
-		w.bits >>= 8
-		if w.nbits > 8 { // Avoid underflow
-			w.nbits -= 8
-		} else {
-			w.nbits = 0
-		}
-	}
-	w.bits = 0
-	w.dst = dst
-}
+func (w *bitWriter) jumpToByteBoundary() { _ = "STUB: not implemented"; return }
+
+// Avoid underflow
